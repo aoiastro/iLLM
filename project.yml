@@ -1,0 +1,38 @@
+name: iLLM
+options:
+  bundleIdPrefix: com.example
+targets:
+  iLLM:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: iLLM
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.iLLM
+      MARKETING_VERSION: 1.0.0
+      CURRENT_PROJECT_VERSION: 1
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_REQUIRED: "NO"
+      CODE_SIGNING_ALLOWED: "NO"
+      AD_HOC_CODE_SIGNING_ALLOWED: "YES"
+    dependencies:
+      - package: mlx-swift-lm
+        product: MLXLLM
+      - package: FlyingFox
+        product: FlyingFox
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.iLLM
+      MARKETING_VERSION: 1.0.0
+      CURRENT_PROJECT_VERSION: 1
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_REQUIRED: "NO"
+      CODE_SIGNING_ALLOWED: "NO"
+      AD_HOC_CODE_SIGNING_ALLOWED: "YES"
+packages:
+  mlx-swift-lm:
+    url: https://github.com/ml-explore/mlx-swift-lm
+    from: 0.1.0
+  FlyingFox:
+    url: https://github.com/swhitty/FlyingFox
+    from: 0.20.0
