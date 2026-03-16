@@ -9,6 +9,7 @@ class ModelManager: ObservableObject {
     @Published var isDownloading = false
     @Published var progress: Double = 0.0
     @Published var loadedContainer: ModelContainer?
+    @Published var loadedModelId: String?
     
     private let hub = HubApi()
 
@@ -18,8 +19,6 @@ class ModelManager: ObservableObject {
         
         Task {
             do {
-                // In mlx-swift-lm, loadContainer handles download if needed.
-                // We'll use a configuration for the model.
                 let configuration = ModelConfiguration(id: modelId)
                 let container = try await LLMModelFactory.shared.loadContainer(configuration: configuration) { progress in
                     Task { @MainActor in
@@ -28,6 +27,7 @@ class ModelManager: ObservableObject {
                 }
                 
                 self.loadedContainer = container
+                self.loadedModelId = modelId
                 self.isDownloading = false
             } catch {
                 print("Failed to download/load model: \(error)")

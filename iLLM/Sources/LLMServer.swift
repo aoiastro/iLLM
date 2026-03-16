@@ -38,12 +38,15 @@ class LLMServer: ObservableObject {
                 
                 do {
                     let result = try await container.perform { context in
+                        let promptTokens = context.tokenizer.encode(text: prompt)
                         return try await MLXLMCommon.generate(
-                            configuration: container.configuration,
+                            promptTokens: promptTokens,
+                            parameters: GenerateParameters(),
                             model: context.model,
-                            tokenizer: context.tokenizer,
-                            prompt: prompt
-                        )
+                            tokenizer: context.tokenizer
+                        ) { _ in
+                            return .continue
+                        }
                     }
                     
                     let response: [String: Any] = [
