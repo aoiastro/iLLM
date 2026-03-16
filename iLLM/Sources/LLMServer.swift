@@ -33,7 +33,7 @@ class LLMServer: ObservableObject {
             self.httpServer = server
             
             await server.appendRoute("/v1/chat/completions") { (request: HTTPRequest) in
-                let body = try? JSONSerialization.jsonObject(with: request.bodyData) as? [String: Any]
+                let body = try? JSONSerialization.jsonObject(with: await request.bodyData) as? [String: Any]
                 let prompt = (body?["messages"] as? [[String: String]])?.last?["content"] ?? "Hello"
                 
                 do {
