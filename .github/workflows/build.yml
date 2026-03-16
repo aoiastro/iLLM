@@ -20,22 +20,23 @@ jobs:
       - name: Resolve Dependencies
         run: xcodebuild -resolvePackageDependencies -project iLLM.xcodeproj
 
-      - name: Build Archive
+      - name: Build
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project iLLM.xcodeproj \
             -scheme iLLM \
             -configuration Release \
-            -archivePath iLLM.xcarchive \
             -destination 'generic/platform=iOS' \
-            CODE_SIGN_IDENTITY="-" \
+            -derivedDataPath derived_data \
+            CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
 
       - name: Export IPA
         run: |
           mkdir -p Payload
-          cp -r iLLM.xcarchive/Products/Applications/iLLM.app Payload/
+          cp -r derived_data/Build/Products/Release-iphoneos/iLLM.app Payload/
           zip -r iLLM.ipa Payload
           
       - name: Upload Artifact
