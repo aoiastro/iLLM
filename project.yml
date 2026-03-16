@@ -17,7 +17,7 @@ targets:
       CODE_SIGNING_ALLOWED: "NO"
       AD_HOC_CODE_SIGNING_ALLOWED: "YES"
     dependencies:
-      - package: mlx-swift-lm
+      - package: MLXSwiftLM
         product: MLXLLM
       - package: FlyingFox
         product: FlyingFox
@@ -30,9 +30,9 @@ targets:
       CODE_SIGNING_ALLOWED: "NO"
       AD_HOC_CODE_SIGNING_ALLOWED: "YES"
 packages:
-  mlx-swift-lm:
+  MLXSwiftLM:
     url: https://github.com/ml-explore/mlx-swift-lm
-    from: 0.1.2
+    branch: main
   FlyingFox:
     url: https://github.com/swhitty/FlyingFox
     from: 0.23.0
