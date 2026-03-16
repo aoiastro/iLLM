@@ -32,7 +32,7 @@ targets:
 packages:
   mlx-swift-lm:
     url: https://github.com/ml-explore/mlx-swift-lm
-    from: 0.1.0
+    from: 0.1.2
   FlyingFox:
     url: https://github.com/swhitty/FlyingFox
-    from: 0.20.0
+    from: 0.23.0

@@ -17,6 +17,9 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
+      - name: Resolve Dependencies
+        run: xcodebuild -resolvePackageDependencies -project iLLM.xcodeproj
+
       - name: Build Archive
         run: |
           xcodebuild archive \
