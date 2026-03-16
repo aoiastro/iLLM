@@ -45,7 +45,7 @@ class LLMServer: ObservableObject {
                             model: context.model,
                             tokenizer: context.tokenizer
                         ) { _ in
-                            return .continue
+                            return .more
                         }
                     }
                     
