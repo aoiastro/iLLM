@@ -1,6 +1,8 @@
 import Foundation
 import MLX
 import MLXLLM
+import MLXLMCommon
+import Hub
 
 @MainActor
 class ModelManager: ObservableObject {

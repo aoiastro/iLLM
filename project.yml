@@ -19,6 +19,10 @@ targets:
     dependencies:
       - package: MLXSwiftLM
         product: MLXLLM
+      - package: MLXSwiftLM
+        product: MLXLMCommon
+      - package: MLXSwiftLM
+        product: Hub
       - package: FlyingFox
         product: FlyingFox
     settings:

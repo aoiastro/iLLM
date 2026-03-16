@@ -39,8 +39,10 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("iLLM Server")
-            .onChange(of: modelManager.loadedContainer) { newContainer in
-                server.modelContainer = newContainer
+            .onChange(of: modelManager.loadedContainer != nil) { isLoaded in
+                if isLoaded {
+                    server.modelContainer = modelManager.loadedContainer
+                }
             }
         }
     }

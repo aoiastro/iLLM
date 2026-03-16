@@ -29,7 +29,7 @@ class LLMServer: ObservableObject {
             let server = HTTPServer(port: 8080)
             self.server = server
             
-            await server.appendRoute("/v1/chat/completions") { request in
+            await server.appendRoute("/v1/chat/completions") { (request: HTTPRequest) in
                 // Extremely simple mock-like but calling MLX
                 let body = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any]
                 let prompt = (body?["messages"] as? [[String: String]])?.last?["content"] ?? "Hello"
