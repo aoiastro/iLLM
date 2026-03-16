@@ -1,3 +1,5 @@
+import Foundation
+import Combine
 import FlyingFox
 import MLX
 import MLXLLM
