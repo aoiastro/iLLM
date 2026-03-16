@@ -1,6 +1,7 @@
 name: iLLM
 options:
   bundleIdPrefix: com.example
+  objectVersion: 56
 targets:
   iLLM:
     type: application
