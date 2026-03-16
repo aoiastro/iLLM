@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var modelManager = ModelManager()
-    @StateObject private var server = LLMServer()
+    @StateObject private var llmServer = LLMServer()
     @State private var modelId = "mlx-community/Llama-3.2-1B-Instruct-4bit"
 
     var body: some View {
@@ -25,9 +25,9 @@ struct ContentView: View {
                 }
 
                 Section(header: Text("Server Status")) {
-                    Toggle("Server Running", isOn: $server.isRunning)
+                    Toggle("Server Running", isOn: $llmServer.isRunning)
                         .disabled(modelManager.loadedContainer == nil)
-                    if server.isRunning {
+                    if llmServer.isRunning {
                         Text("API reachable at http://localhost:8080")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -41,7 +41,7 @@ struct ContentView: View {
             .navigationTitle("iLLM Server")
             .onChange(of: modelManager.loadedContainer != nil) { isLoaded in
                 if isLoaded {
-                    server.modelContainer = modelManager.loadedContainer
+                    llmServer.modelContainer = modelManager.loadedContainer
                 }
             }
         }

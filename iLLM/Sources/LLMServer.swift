@@ -1,7 +1,8 @@
-import Foundation
 import FlyingFox
 import MLX
 import MLXLLM
+import MLXLMCommon
+import Hub
 
 @MainActor
 class LLMServer: ObservableObject {
@@ -15,7 +16,7 @@ class LLMServer: ObservableObject {
         }
     }
 
-    private var server: HTTPServer?
+    private var httpServer: HTTPServer?
     var modelContainer: ModelContainer?
 
     func start() {
@@ -27,34 +28,38 @@ class LLMServer: ObservableObject {
 
         Task {
             let server = HTTPServer(port: 8080)
-            self.server = server
+            self.httpServer = server
             
             await server.appendRoute("/v1/chat/completions") { (request: HTTPRequest) in
-                // Extremely simple mock-like but calling MLX
                 let body = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any]
                 let prompt = (body?["messages"] as? [[String: String]])?.last?["content"] ?? "Hello"
                 
-                let result = try await LLMModelFactory.shared.generate(
-                    container: container,
-                    configuration: container.configuration,
-                    prompt: prompt
-                ) { _ in 
-                    // progress callback
-                }
-                
-                let response: [String: Any] = [
-                    "choices": [
-                        [
-                            "message": [
-                                "role": "assistant",
-                                "content": result.output
+                do {
+                    let result = try await container.perform { context in
+                        return try await MLXLMCommon.generate(
+                            configuration: container.configuration,
+                            model: context.model,
+                            tokenizer: context.tokenizer,
+                            prompt: prompt
+                        )
+                    }
+                    
+                    let response: [String: Any] = [
+                        "choices": [
+                            [
+                                "message": [
+                                    "role": "assistant",
+                                    "content": result.output
+                                ]
                             ]
                         ]
                     ]
-                ]
-                
-                let data = try! JSONSerialization.data(withJSONObject: response)
-                return HTTPResponse(statusCode: .ok, body: data)
+                    
+                    let data = try! JSONSerialization.data(withJSONObject: response)
+                    return HTTPResponse(statusCode: .ok, body: data)
+                } catch {
+                    return HTTPResponse(statusCode: .internalServerError, body: "Generation failed: \(error)".data(using: .utf8)!)
+                }
             }
             
             do {
@@ -68,8 +73,8 @@ class LLMServer: ObservableObject {
 
     func stop() {
         Task {
-            await server?.stop()
-            server = nil
+            await httpServer?.stop()
+            httpServer = nil
         }
     }
 }
