@@ -33,13 +33,13 @@ class LLMServer: ObservableObject {
             self.httpServer = server
             
             await server.appendRoute("/v1/chat/completions") { (request: HTTPRequest) in
-                let body = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any]
+                let body = try? JSONSerialization.jsonObject(with: request.bodyData) as? [String: Any]
                 let prompt = (body?["messages"] as? [[String: String]])?.last?["content"] ?? "Hello"
                 
                 do {
                     let result = try await container.perform { context in
                         let promptTokens = context.tokenizer.encode(text: prompt)
-                        return try await MLXLMCommon.generate(
+                        return try MLXLMCommon.generate(
                             promptTokens: promptTokens,
                             parameters: GenerateParameters(),
                             model: context.model,
@@ -68,7 +68,7 @@ class LLMServer: ObservableObject {
             }
             
             do {
-                try await server.start()
+                try await server.run()
             } catch {
                 print("Server error: \(error)")
                 self.isRunning = false
