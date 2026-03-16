@@ -18,8 +18,8 @@ struct ContentView: View {
                     if modelManager.isDownloading {
                         ProgressView("Downloading...", value: modelManager.progress)
                     }
-                    if let container = modelManager.loadedContainer {
-                        Text("Loaded: \(container.configuration.id)")
+                    if let modelId = modelManager.loadedModelId {
+                        Text("Loaded: \(modelId)")
                             .font(.caption)
                     }
                 }
@@ -39,7 +39,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("iLLM Server")
-            .onChange(of: modelManager.loadedContainer != nil) { isLoaded in
+            .onChange(of: modelManager.loadedContainer != nil) { oldValue, isLoaded in
                 if isLoaded {
                     llmServer.modelContainer = modelManager.loadedContainer
                 }
